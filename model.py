@@ -9,7 +9,8 @@ from data_helpers import load_data
 print('Loading data')
 x, y, vocabulary, vocabulary_inv = load_data()
 
-X_train, X_test, y_train, y_test = train_test_split( x, y, test_size=0.2, random_state=42)
+x_temp, x_test, y_temp, y_test = train_test_split( x, y, test_size=0.2, random_state=42)
+x_train, x_val, y_train, y_val = train_test_split( x_temp, y_temp, test_size=0.2, random_state=42)
 
 sequence_length = x.shape[1] # 56
 vocabulary_size = len(vocabulary_inv) # 18765
@@ -18,7 +19,7 @@ filter_sizes = [3,4,5]
 num_filters = 512
 drop = 0.5
 
-epochs = 100
+epochs = 50
 batch_size = 30
 
 # this returns a tensor
@@ -48,7 +49,12 @@ adam = Adam(lr=1e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 
 model.compile(optimizer=adam, loss='binary_crossentropy', metrics=['accuracy'])
 print("Traning Model...")
-model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1, callbacks=[checkpoint], validation_data=(X_test, y_test))  # starts training
+model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1, callbacks=[checkpoint], validation_data=(x_test, y_test))  # starts training
 
+
+loss_and_metrics = model.evaluate(x_test, y_test, batch_size=32)
+print('## evaluation loss and_metrics ##')
+print(loss_and_metrics)
+print('{0} : {1}'.format(model.metrics_names[1], loss_and_metrics[1]))
 
 

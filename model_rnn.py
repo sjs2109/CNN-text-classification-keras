@@ -51,8 +51,9 @@ model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # 4. 모델 학습시키기
-hist = model.fit(x_train, y_train, epochs=2, batch_size=32, validation_data=(x_val, y_val))
+hist = model.fit(x_train, y_train, epochs=50, batch_size=32, validation_data=(x_val, y_val))
 
 loss_and_metrics = model.evaluate(x_test, y_test, batch_size=32)
 print('## evaluation loss and_metrics ##')
 print(loss_and_metrics)
+print('{0} : {1}'.format(model.metrics_names[1], loss_and_metrics[1]))
