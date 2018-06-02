@@ -1,9 +1,7 @@
 # 0. 사용할 패키지 불러오기
-from keras.datasets import imdb
 from keras.preprocessing import sequence
 from keras.models import Sequential
 from keras.layers import Dense, Embedding, LSTM
-import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from data_helpers import load_data
 import pandas as pd
@@ -28,16 +26,15 @@ positive_labels = [1 for _ in positive_examples]
 negative_labels = [0 for _ in negative_examples]
 y = np.concatenate([positive_labels, negative_labels], 0)
 
-x_train, x_test, y_train, y_test = train_test_split( x, y, test_size=0.2, random_state=42)
-x_train = x_train.tolist()
+x_temp, x_test, y_temp, y_test = train_test_split( x, y, test_size=0.2, random_state=42)
+x_train, x_val, y_train, y_val = train_test_split( x_temp, y_temp, test_size=0.2, random_state=42)
+
 x_test = x_test.tolist()
+y_test = y_test.tolist()
 
+x_val = x_val.tolist()
+y_val = y_val.tolist()
 
-# 훈련셋과 검증셋 분리
-x_val = x_train[2000:]
-y_val = y_train[2000:]
-x_train = x_train[:2000]
-y_train = y_train[:2000]
 
 # 데이터셋 전처리 : 문장 길이 맞추기
 x_train = sequence.pad_sequences(x_train, maxlen=text_max_words)
@@ -54,7 +51,7 @@ model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # 4. 모델 학습시키기
-hist = model.fit(x_train, y_train, epochs=20, batch_size=32, validation_data=(x_val, y_val))
+hist = model.fit(x_train, y_train, epochs=2, batch_size=32, validation_data=(x_val, y_val))
 
 loss_and_metrics = model.evaluate(x_test, y_test, batch_size=32)
 print('## evaluation loss and_metrics ##')
