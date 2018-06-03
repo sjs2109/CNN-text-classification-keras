@@ -14,13 +14,13 @@ x_train, x_val, y_train, y_val = train_test_split( x_temp, y_temp, test_size=0.2
 
 sequence_length = x.shape[1] # 56
 vocabulary_size = len(vocabulary_inv) # 18765
-embedding_dim = 256
+embedding_dim = 1024
 filter_sizes = [3,4,5]
-num_filters = 512
+num_filters = 1024
 drop = 0.5
 
-epochs = 50
-batch_size = 30
+epochs = 10
+batch_size = 32
 
 # this returns a tensor
 print("Creating Model...")
@@ -28,9 +28,9 @@ inputs = Input(shape=(sequence_length,), dtype='int32')
 embedding = Embedding(input_dim=vocabulary_size, output_dim=embedding_dim, input_length=sequence_length)(inputs)
 reshape = Reshape((sequence_length,embedding_dim,1))(embedding)
 
-conv_0 = Conv2D(num_filters, kernel_size=(filter_sizes[0], embedding_dim), padding='valid', kernel_initializer='normal', activation='relu')(reshape)
-conv_1 = Conv2D(num_filters, kernel_size=(filter_sizes[1], embedding_dim), padding='valid', kernel_initializer='normal', activation='relu')(reshape)
-conv_2 = Conv2D(num_filters, kernel_size=(filter_sizes[2], embedding_dim), padding='valid', kernel_initializer='normal', activation='relu')(reshape)
+conv_0 = Conv2D(num_filters, kernel_size=(filter_sizes[0], embedding_dim), padding='valid', kernel_initializer='he_uniform', activation='relu')(reshape)
+conv_1 = Conv2D(num_filters, kernel_size=(filter_sizes[1], embedding_dim), padding='valid', kernel_initializer='he_uniform', activation='relu')(reshape)
+conv_2 = Conv2D(num_filters, kernel_size=(filter_sizes[2], embedding_dim), padding='valid', kernel_initializer='he_uniform', activation='relu')(reshape)
 
 maxpool_0 = MaxPool2D(pool_size=(sequence_length - filter_sizes[0] + 1, 1), strides=(1,1), padding='valid')(conv_0)
 maxpool_1 = MaxPool2D(pool_size=(sequence_length - filter_sizes[1] + 1, 1), strides=(1,1), padding='valid')(conv_1)
