@@ -43,15 +43,15 @@ x_test = sequence.pad_sequences(x_test, maxlen=text_max_words)
 
 # 2. 모델 구성하기
 model = Sequential()
-model.add(Embedding(len(vocabulary), 128))
-model.add(LSTM(128))
+model.add(Embedding(len(vocabulary), 1024))
+model.add(LSTM(1024))
 model.add(Dense(1, activation='sigmoid'))
 
 # 3. 모델 학습과정 설정하기
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # 4. 모델 학습시키기
-hist = model.fit(x_train, y_train, epochs=50, batch_size=32, validation_data=(x_val, y_val))
+hist = model.fit(x_train, y_train, epochs=10, batch_size=32, validation_data=(x_val, y_val))
 
 loss_and_metrics = model.evaluate(x_test, y_test, batch_size=32)
 print('## evaluation loss and_metrics ##')
