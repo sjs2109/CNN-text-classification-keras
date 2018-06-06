@@ -4,6 +4,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Embedding, LSTM
 from data_helpers import load_data
 from keras.callbacks import ModelCheckpoint
+from keras.callbacks import EarlyStopping
 import pandas as pd
 import numpy as np
 
@@ -47,10 +48,11 @@ for train, test in kfold.split(x, y):
 
     # 3. 모델 학습과정 설정하기
     checkpoint = ModelCheckpoint('weights.{epoch:03d}-{acc:.4f}.hdf5', monitor='acc', verbose=1, save_best_only=True, mode='auto')
+    early_stopping = EarlyStopping(monitor='val_acc', min_delta=0, patience=5, verbose=1, mode='auto')
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     # 4. 모델 학습시키기
-    hist = model.fit(x[train], y[train], epochs=20, batch_size=32,callbacks=[checkpoint])
+    hist = model.fit(x[train], y[train], epochs=20, batch_size=32,callbacks=[checkpoint, early_stopping])
 
     scores = model.evaluate(x[test], y[test], verbose=0)
     print("%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))

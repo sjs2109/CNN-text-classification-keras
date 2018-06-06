@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 from data_helpers import load_data
 from sklearn.utils import shuffle
 import numpy as np
+from keras.callbacks import EarlyStopping
 
 print('Loading data')
 x, y, vocabulary, vocabulary_inv = load_data()
@@ -58,7 +59,7 @@ embedding_dim = 1024
 filter_sizes = [3,4,5]
 num_filters = 1024
 drop = 0.5
-epochs = 25
+epochs = 100
 batch_size = 32
 
 for i in range(10):
@@ -101,11 +102,12 @@ for i in range(10):
     model = Model(inputs=inputs, outputs=output)
 
     checkpoint = ModelCheckpoint('weights.{epoch:03d}-{val_acc:.4f}.hdf5', monitor='val_acc', verbose=1, save_best_only=True, mode='auto')
+    early_stopping = EarlyStopping(monitor='val_acc', min_delta=0, patience=5, verbose=1, mode='auto')
     adam = Adam(lr=1e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 
     model.compile(optimizer=adam, loss='binary_crossentropy', metrics=['accuracy'])
     print("Traning Model...")
-    model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1, callbacks=[checkpoint], validation_data=(x_test, y_test))  # starts training
+    model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1, callbacks=[checkpoint, early_stopping], validation_data=(x_test, y_test))  # starts training
 
     loss_and_metrics = model.evaluate(x_test, y_test, batch_size=32)
     print('## evaluation loss and_metrics ##')
