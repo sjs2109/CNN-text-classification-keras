@@ -102,12 +102,12 @@ for i in range(10):
     model = Model(inputs=inputs, outputs=output)
 
     checkpoint = ModelCheckpoint('weights.{epoch:03d}-{val_acc:.4f}.hdf5', monitor='val_acc', verbose=1, save_best_only=True, mode='auto')
-    early_stopping = EarlyStopping(monitor='val_acc', min_delta=0, patience=5, verbose=1, mode='auto')
+    early_stopping = EarlyStopping(monitor='val_acc', min_delta=0, patience=4, verbose=2, mode='auto')
     adam = Adam(lr=1e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 
     model.compile(optimizer=adam, loss='binary_crossentropy', metrics=['accuracy'])
     print("Traning Model...")
-    model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1, callbacks=[checkpoint, early_stopping], validation_data=(x_test, y_test))  # starts training
+    model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, verbose=2, callbacks=[checkpoint, early_stopping], validation_data=(x_val, y_val))  # starts training
 
     loss_and_metrics = model.evaluate(x_test, y_test, batch_size=32)
     print('## evaluation loss and_metrics ##')
