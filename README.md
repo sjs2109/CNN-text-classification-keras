@@ -1,7 +1,6 @@
 # CNN-text-classification-keras
 
-It is simplified implementation of [Implementing a CNN for Text Classification in TensorFlow](http://www.wildml.com/2015/12/implementing-a-cnn-for-text-classification-in-tensorflow/) in Keras as functional api
-
+It is implementation of [Implementing a CNN for Text Classification in TensorFlow](http://www.wildml.com/2015/12/implementing-a-cnn-for-text-classification-in-tensorflow/) in Keras as functional api Also it use 10-folding cross-validation and early stop
 # Requirements
 - [Python 3.5.2](https://www.python.org/)
 - [Keras 2.1.2](http://keras.io/)
