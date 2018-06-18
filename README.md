@@ -8,14 +8,15 @@ It is simplified implementation of [Implementing a CNN for Text Classification i
 - [Tensorflow 1.4.1](https://www.tensorflow.org/)
 
 # Traning
-Run the below command and it will run for 100 epochs if you want change it just open [model.py](https://github.com/bhaveshoswal/CNN-text-classification-keras/blob/master/model.py)
-
+Run the below command and it will run for 100 epochs if you want change it just open model.py
 `python model.py`
+You can run rnn implementation version
+`python model_rnn.py`
 
 # For new data
 You have to rebuild the vocabulary and then train.
 
-# For Citation
+# For Citation (original)
 ```
 @misc{bhaveshoswal,
   author = {Bhavesh Vinod Oswal},
